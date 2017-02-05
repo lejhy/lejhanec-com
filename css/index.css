@@ -1,0 +1,59 @@
+@import "footer.css";
+@import "downloaded.css";
+@import "rotating-card.css";
+@import "bootstrap-xl-xxl.css";
+@import "hovereffect.css";
+
+.input-group-btn button {
+  height: 34px;
+}
+.input-group-btn button .glyphicon-search {
+  top: 2px;
+}
+
+.navbar {
+  border-radius: 0;
+}
+
+.carousel-inner img {
+  width: 100%;
+}
+
+body {
+  padding-top: 50px;
+}
+
+.section {
+  margin-top: 130px;
+  padding-top: 120px;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.section-divider {
+  margin-top: auto;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.article p {
+  margin-top: 0.5em;
+  font-size: 1.2em;
+}
+
+#Gallery .hovereffect, #Videos .embed-responsive{
+  margin-bottom: 30px;
+}
+
+#baby {
+  margin-bottom: : -300px;
+  padding-bottom: : -300px;
+}
+
+h1 {
+  margin-bottom: 1em;
+}
+
+.modal-lg{
+  width : 80%;
+}
