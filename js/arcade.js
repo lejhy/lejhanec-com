@@ -20,6 +20,8 @@ const BALL_RADIUS = 5;
 
 $(document).ready(function() {
   canvas = document.getElementById("arcadeCanvas");
+  canvas.height = window.innerHeight-5;
+  canvas.width = window.innerWidth-5;
   canvasContext = canvas.getContext("2d");
   var framesPerSecond = 60;
   setInterval(function(){
