@@ -57,3 +57,20 @@ h1 {
 .modal-lg{
   width : 90%;
 }
+
+.page-clipper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.page-container {
+  transform: translate3d(0, 0, 0);
+  transition: transform .5s ease-in-out;
+}
+
+.page {
+  float: left;
+  width: 25%;
+  white-space: normal;
+  background-repeat: no-repeat;
+}

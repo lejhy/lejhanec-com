@@ -1,6 +1,7 @@
 var gallery = [];
 var jsImgFolder = "../img/";
 var indexImgFolder = "img/";
+var curPosition = 0;
 
 $(document).ready(function() {
   $.ajax({
@@ -14,11 +15,17 @@ $(document).ready(function() {
     },
     complete: function(){
       var i = 0;
+      var imgPerPage = 12;
+      var pages = Math.ceil(gallery.length/imgPerPage);
+      $("#Gallery .page-container").width(100*pages + "%");
       for (picture of gallery) {
-        if(i%4 == 0){
-          $("#Gallery nav").before("<div class='row'> </div>");
+        if(i%imgPerPage == 0){
+          $("#Gallery .page-container").append("<div class='page' style='width : " + 100/pages + "%'><div class='container-fluid'></div></div>");
         }
-        $("#Gallery .row:last").append('<div class="col-sm-6 col-md-3 col-md-3"><div class="hovereffect"><img src="' + jsImgFolder + picture + '" class="img-responsive img-thumbnail" style="width:100%" alt="Image"><div class="overlay"><h2>' + picture + '</h2><p><a href="javascript:void(0)" onclick="viewImage(\'' + picture + '\')">View</a></p><p><a href="' + indexImgFolder + picture + '" download>Download</a></p></div></div>');
+        if(i%4 == 0){
+          $("#Gallery .page:last .container-fluid").append("<div class='row'> </div>");
+        }
+        $("#Gallery .page:last .row:last").append('<div class="col-sm-6 col-md-3 col-md-3"><div class="hovereffect"><img src="' + jsImgFolder + picture + '" class="img-responsive img-thumbnail" style="width:100%" alt="Image"><div class="overlay"><h2>' + picture + '</h2><p><a href="javascript:void(0)" onclick="viewImage(\'' + picture + '\')">View</a></p><p><a href="' + indexImgFolder + picture + '" download>Download</a></p></div></div>');
 
         if(i === 0){
           $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + i + '" class="active"></li>');
@@ -29,6 +36,22 @@ $(document).ready(function() {
         }
         i++;
       }
+      $("#Gallery .next").on('click', function(event) {
+        event.preventDefault();
+        if(curPosition > -100+100/pages){
+          var nextPosition = curPosition - 100/pages;
+          $("#Gallery .page-container").css("transform", "translateX(" + nextPosition + "%)");
+          curPosition = nextPosition;
+        }
+      });
+      $("#Gallery .previous").on('click', function(event) {
+        event.preventDefault();
+        if(curPosition < 0){
+          var nextPosition = curPosition + 100/pages;
+          $("#Gallery .page-container").css("transform", "translateX(" + nextPosition + "%)");
+          curPosition = nextPosition;
+        }
+      });
     }
   });
 });
