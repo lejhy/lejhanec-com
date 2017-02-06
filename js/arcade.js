@@ -12,6 +12,7 @@ var computerPaddleY = 250;
 var playerScore = 0;
 var computerScore = 0;
 var showingWinScreen = false;
+var computerSpeed = 2;
 
 const PADDLE_HEIGHT = 100;
 const PADDLE_WIDTH = 10;
@@ -131,8 +132,16 @@ function ballReset(){
 function computerMovement(){
   var computerPaddleYCenter = computerPaddleY+PADDLE_HEIGHT/2;
   if(computerPaddleYCenter < ballY){
-    computerPaddleY += 2;
-  } else {
-    computerPaddleY -= 2;
+    if(computerPaddleY + computerSpeed < ballY){
+      computerPaddleY += computerSpeed;
+    } else {
+      computerPaddleY = ballY;
+    }
+  } else if (computerPaddleYCenter > ballY){
+    if(computerPaddleY - computerSpeed > ballY){
+      computerPaddleY -= computerSpeed;
+    } else {
+      computerPaddleY = ballY;
+    }
   }
 }
