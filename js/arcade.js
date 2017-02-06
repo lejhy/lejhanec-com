@@ -14,6 +14,7 @@ var computerScore = 0;
 var showingMenuScreen = true;
 var showingWinScreen = false;
 var computerSpeed = 2;
+var ballYFactor = 0.35;
 
 const PADDLE_HEIGHT = 100;
 const PADDLE_WIDTH = 10;
@@ -54,6 +55,26 @@ function handleMouseClick(event){
     computerScore = 0;
     showingWinScreen = false;
   }
+  if (showingMenuScreen){
+    var mousePos = getMousePos(event);
+    //hard
+    if(mousePos.x > canvas.width/2-25 && mousePos.x < canvas.width/2+15 && mousePos.y > canvas.height/2-65 && mousePos.y < canvas.height/2-40){
+      computerSpeed = 40;
+      ballSpeedX = 20;
+      ballYFactor = 1;
+      showingMenuScreen = false;
+    } else if(mousePos.x > canvas.width/2-32 && mousePos.x < canvas.width/2+22 && mousePos.y > canvas.height/2-115 && mousePos.y < canvas.height/2-90){
+      computerSpeed = 20;
+      ballSpeedX = 20;
+      ballYFactor = 0.7;
+      showingMenuScreen = false;
+    } else if(mousePos.x > canvas.width/2-25 && mousePos.x < canvas.width/2+15 && mousePos.y > canvas.height/2-175 && mousePos.y < canvas.height/2-140){
+      computerSpeed = 10;
+      ballSpeedX = 10;
+      ballYFactor = 0.35;
+      showingMenuScreen = false;
+    }
+  }
 }
 
 function render(){
@@ -61,11 +82,17 @@ function render(){
   canvasContext.fillStyle = "black";
   canvasContext.fillRect(0,0,canvas.width,canvas.height);
   canvasContext.fillStyle = "White";
-  if (showingWinScreen == true){
-    if (playerScore > computerScore){
-      canvasContext.fillText("Player Wins!!!", canvas.width/2-30, canvas.height/2-200);
-    } else {
-      canvasContext.fillText("Computer Wins!!!", canvas.width/2-35, canvas.height/2-200);
+  if (showingMenuScreen == true){
+    canvasContext.fillText("Select difficulty", canvas.width/2-35, canvas.height/2-200);
+    canvasContext.fillText("Easy", canvas.width/2-15, canvas.height/2-150);
+    canvasContext.fillText("Medium", canvas.width/2-22, canvas.height/2-100);
+    canvasContext.fillText("Hard", canvas.width/2-15, canvas.height/2-50);
+    if (showingWinScreen == true){
+      if (playerScore > computerScore){
+        canvasContext.fillText("Player Wins!!!", canvas.width/2-33, canvas.height/2-300);
+      } else {
+        canvasContext.fillText("Computer Wins!!!", canvas.width/2-38, canvas.height/2-300);
+      }
     }
     return;
   }
@@ -96,7 +123,7 @@ function update(){
     if(ballY+BALL_RADIUS > playerPaddleY && ballY-BALL_RADIUS < playerPaddleY+PADDLE_HEIGHT){
       ballSpeedX *= -1;
       var deltaY = ballY - (playerPaddleY+PADDLE_HEIGHT/2);
-      ballSpeedY = deltaY*0.35
+      ballSpeedY = deltaY*ballYFactor;
     } else if (ballX-BALL_RADIUS <= BORDER_WIDTH){
       ballSpeedX *= -1;
       computerScore++;
@@ -106,7 +133,7 @@ function update(){
     if(ballY+BALL_RADIUS > computerPaddleY && ballY-BALL_RADIUS < computerPaddleY+PADDLE_HEIGHT){
       ballSpeedX *= -1;
       var deltaY = ballY - (computerPaddleY+PADDLE_HEIGHT/2);
-      ballSpeedY = deltaY*0.35
+      ballSpeedY = deltaY*ballYFactor;
     } else if (ballX+BALL_RADIUS >= canvas.width-BORDER_WIDTH){
       ballSpeedX *= -1;
       playerScore++;
@@ -124,6 +151,8 @@ function update(){
 function ballReset(){
   if (playerScore >= 3 || computerScore >= 3){
     showingWinScreen = true;
+    showingMenuScreen = true;
+    ballSpeedX = 0;
   }
   ballX = canvas.width/2;
   ballY = canvas.height/2;
