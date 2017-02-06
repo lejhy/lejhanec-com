@@ -1,13 +1,13 @@
 var canvas;
 var canvasContext;
 
-var ballX = 400;
-var ballY = 300;
+var ballX;
+var ballY;
 var ballSpeedX = 10;
 var ballSpeedY = 2;
 
 var playerPaddleY;
-var computerPaddleY = 250;
+var computerPaddleY;
 
 var playerScore = 0;
 var computerScore = 0;
@@ -20,19 +20,26 @@ const PADDLE_HEIGHT = 100;
 const PADDLE_WIDTH = 10;
 const BORDER_WIDTH = 10;
 const BALL_RADIUS = 5;
+const SUB_UPDATES = 2;
 
 $(document).ready(function() {
   canvas = document.getElementById("arcadeCanvas");
   canvas.height = window.innerHeight-5;
   canvas.width = window.innerWidth-5;
+  ballX = canvas.width/2;
+  ballY = canvas.height/2;
+  computerPaddleY = canvas.height/2;
+  playerPaddleY = canvas.height/2;
   canvasContext = canvas.getContext("2d");
   var framesPerSecond = 60;
-  setInterval(function(){
-    update();
-    render();
-  }, 1000/framesPerSecond);
+  setInterval(render, 1000/framesPerSecond);
+  setInterval(update, (1000/framesPerSecond)/SUB_UPDATES);
   canvas.addEventListener("mousemove", function(event){
     var mousePos = getMousePos(event);
+    playerPaddleY = mousePos.y-(PADDLE_HEIGHT/2);
+  });
+  canvas.addEventListener("touchmove", function(event){
+    var mousePos = getTouchPos(event);
     playerPaddleY = mousePos.y-(PADDLE_HEIGHT/2);
   });
   canvas.addEventListener("click", handleMouseClick);
@@ -43,6 +50,18 @@ function getMousePos(event){
   var root = document.documentElement;
   var mouseX = event.clientX - rect.left - root.scrollLeft;
   var mouseY = event.clientY - rect.top - root.scrollTop;
+  return {
+    x: mouseX,
+    y: mouseY
+  };
+}
+
+function getTouchPos(event){
+  var rect = canvas.getBoundingClientRect();
+  var root = document.documentElement;
+  event.preventDefault();
+  var mouseX = event.changedTouches[0].clientX - rect.left - root.scrollLeft;
+  var mouseY = event.changedTouches[0].clientY - rect.top - root.scrollTop;
   return {
     x: mouseX,
     y: mouseY
@@ -144,8 +163,8 @@ function update(){
     ballSpeedY *= -1;
   }
   computerMovement();
-  ballX += ballSpeedX;
-  ballY += ballSpeedY;
+  ballX += ballSpeedX/SUB_UPDATES;
+  ballY += ballSpeedY/SUB_UPDATES;
 }
 
 function ballReset(){
@@ -162,14 +181,14 @@ function ballReset(){
 function computerMovement(){
   var computerPaddleYCenter = computerPaddleY+PADDLE_HEIGHT/2;
   if(computerPaddleYCenter < ballY){
-    if(computerPaddleYCenter + computerSpeed < ballY){
-      computerPaddleY += computerSpeed;
+    if(computerPaddleYCenter + computerSpeed/SUB_UPDATES < ballY){
+      computerPaddleY += computerSpeed/SUB_UPDATES;
     } else {
       computerPaddleY = ballY-PADDLE_HEIGHT/2;
     }
   } else if (computerPaddleYCenter > ballY){
-    if(computerPaddleYCenter - computerSpeed > ballY){
-      computerPaddleY -= computerSpeed;
+    if(computerPaddleYCenter - computerSpeed/SUB_UPDATES > ballY){
+      computerPaddleY -= computerSpeed/SUB_UPDATES;
     } else {
       computerPaddleY = ballY-PADDLE_HEIGHT/2;
     }
