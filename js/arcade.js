@@ -11,6 +11,7 @@ var computerPaddleY = 250;
 
 var playerScore = 0;
 var computerScore = 0;
+var showingMenuScreen = true;
 var showingWinScreen = false;
 var computerSpeed = 2;
 
@@ -132,16 +133,16 @@ function ballReset(){
 function computerMovement(){
   var computerPaddleYCenter = computerPaddleY+PADDLE_HEIGHT/2;
   if(computerPaddleYCenter < ballY){
-    if(computerPaddleY + computerSpeed < ballY){
+    if(computerPaddleYCenter + computerSpeed < ballY){
       computerPaddleY += computerSpeed;
     } else {
-      computerPaddleY = ballY;
+      computerPaddleY = ballY-PADDLE_HEIGHT/2;
     }
   } else if (computerPaddleYCenter > ballY){
-    if(computerPaddleY - computerSpeed > ballY){
+    if(computerPaddleYCenter - computerSpeed > ballY){
       computerPaddleY -= computerSpeed;
     } else {
-      computerPaddleY = ballY;
+      computerPaddleY = ballY-PADDLE_HEIGHT/2;
     }
   }
 }
