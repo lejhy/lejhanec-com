@@ -1,5 +1,5 @@
-const boardSize = 30;
-const toWin = 3;
+const boardSize = 15;
+const toWin = 4;
 const computerValue = 1;
 const humanValue = -1;
 
@@ -60,101 +60,35 @@ function checkWin(boardState, playerValue, lastX, lastY){
   for(var i = 1-toWin; i < toWin; i++){
     if(boardState[lastX+i][lastY] == playerValue){
       countH ++;
+      if (countH == toWin){
+        return true;
+      }
     } else {
       countH = 0;
     }
     if(boardState[lastX][lastY+i] == playerValue){
       countV ++;
+      if (countV == toWin){
+        return true;
+      }
     } else {
       countV = 0;
     }
     if(boardState[lastX+i][lastY+i] == playerValue){
       countD1 ++;
+      if (countD1 == toWin){
+        return true;
+      }
     } else {
       countD1 = 0;
     }
     if(boardState[lastX-i][lastY+i] == playerValue){
       countD2 ++;
+      if (countD2 == toWin){
+        return true;
+      }
     } else {
       countD2 = 0;
-    }
-  }
-  if (countH == toWin || countV == toWin || countD1 == toWin || countD2 == toWin){
-    return true;
-  }
-  return false;
-}
-
-function naiveCheckWin(boardState, playerValue){
-  //horizontal
-  var count = 0;
-  var x;
-  var y;
-  var i;
-  for(x=0; x < boardSize; x++){
-    for(y=0; y < boardSize; y++){
-      if (board[x][y] == playerValue){
-        count++;
-        if (count == toWin){
-          return true;
-        }
-      } else {
-        count = 0;
-      }
-    }
-  }
-  //vertical
-  count = 0;
-  for(y=0; y < boardSize; y++){
-    for(x=0; x < boardSize; x++){
-      if (board[x][y] == playerValue){
-        count++;
-        if (count == toWin){
-          return true;
-        }
-      } else {
-        count = 0;
-      }
-    }
-  }
-  //positive diagonal
-  count = 0;
-  for(x=0; x < boardSize; x++){
-    for(y=0; y < boardSize; y++){
-      if (board[x][y] == playerValue){
-        count++;
-        for(i = 1; i < toWin; i++){
-          if(x+i < boardSize && y+i < boardSize && board[x+i][y+i] == playerValue){
-            count++;
-          } else {
-            count = 0;
-            break;
-          }
-        }
-        if (count == toWin){
-          return true;
-        }
-      }
-    }
-  }
-  //negative diagonal
-  count = 0;
-  for(x=0; x < boardSize; x++){
-    for(y=0; y < boardSize; y++){
-      if (board[x][y] == playerValue){
-        count++;
-        for(i = 1; i < toWin; i++){
-          if(x-i >= 0 && y+i < boardSize && board[x-i][y+i] == playerValue){
-            count++;
-          } else {
-            count = 0;
-            break;
-          }
-        }
-        if (count == toWin){
-          return true;
-        }
-      }
     }
   }
   return false;
@@ -186,7 +120,7 @@ function AI(boardState, depth, playerValue, lastX, lastY){
   if(checkWin(boardState, -playerValue, lastX, lastY)) {
     return - 10 + depth;
   }
-  if(isFull(boardState) || depth > 2){
+  if(isFull(boardState) || depth > 3){
     return 0;
   }
   var max = -10;
@@ -198,8 +132,8 @@ function AI(boardState, depth, playerValue, lastX, lastY){
   var i;
   var j;
 
-  for(x=lastX-2; x < lastX+2; x++){
-    for(y=lastY-2; y < lastY+2; y++){
+  for(x=4; x < boardSize-3; x++){
+    for(y=4; y < boardSize-3; y++){
       if (boardState[x][y] == 0){
         var boardSubState = [];
         for(i=0; i < boardSize; i++){
