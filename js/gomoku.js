@@ -1,4 +1,4 @@
-const boardSize = 7;
+const boardSize = 10;
 const toWin = 5;
 const computerValue = 1;
 const humanValue = -1;
@@ -120,7 +120,7 @@ function isFull(boardState){
 }
 
 function computerMove(){
-  AI(board, 0, computerValue, globalLastX, globalLastY);
+  MiniMaxAB(board, 0, computerValue, globalLastX, globalLastY);
   if(checkWin(board, computerValue, globalLastX, globalLastY)){
     gameOver = true;
     $(".status").text("You lost...");
@@ -177,8 +177,10 @@ function AI(boardState, depth, playerValue, lastX, lastY){
   return max;
 }
 
-function MiniMaxAB (boardState, depth, a, b, lastX, lastY){
-  var max = -100;
+function MiniMaxAB (boardState, depth, playerValue, lastX, lastY){
+  var a = -100;
+  var b = 100
+  var max;
   var value;
   var indexX;
   var indexY;
@@ -186,22 +188,29 @@ function MiniMaxAB (boardState, depth, a, b, lastX, lastY){
   var y;
   var i;
   var j;
-  for(x=0; x < boardSize; x++){
-    for(y=0; y < boardSize; y++){
-      if (boardState[x][y] == 0){
-        var boardSubState = [];
-        for(i=0; i < boardSize; i++){
-          boardSubState[i] = [];
-          for(j=0; j < boardSize; j++){
-            boardSubState[i][j] = boardState[i][j];
+  evaluation:{
+    for(x=0; x < boardSize; x++){
+      for(y=0; y < boardSize; y++){
+        if (boardState[x][y] == 0){
+          var boardSubState = [];
+          for(i=0; i < boardSize; i++){
+            boardSubState[i] = [];
+            for(j=0; j < boardSize; j++){
+              boardSubState[i][j] = boardState[i][j];
+            }
           }
-        }
-        boardSubState[x][y] = 1;
-        value = MinAB(boardSubState, depth - 1, a, b, -1, x, y);
-        if (value > max){
-          max = value;
-          indexX = x;
-          indexY = y;
+          boardSubState[x][y] = 1;
+          value = MinAB(boardSubState, depth + 1, a, b, x, y);
+          if (value >= b){
+            indexX = x;
+            indexY = y;
+            break evaluation;
+          }
+          if (value > a){
+            a = value;
+            indexX = x;
+            indexY = y;
+          }
         }
       }
     }
@@ -211,14 +220,14 @@ function MiniMaxAB (boardState, depth, a, b, lastX, lastY){
   globalLastX = indexX;
   globalLastY = indexY;
   $("#board").find("[data-x='"+ indexX + "']").filter("[data-y='" + indexY + "']").html("<i class='fa fa-circle'></i>");
-  console.log(value);
+  console.log(a);
 }
 
 function MaxAB(boardState, depth, a, b, lastX, lastY){
-  if (depth == 0){
-    if(checkWin(boardState, -1, lastX, lastY)) {
-      return -10;
-    }
+  if(checkWin(boardState, -1, lastX, lastY)) {
+    return -10+depth;
+  }
+  if (depth == 5){
     return 0;
   }
   var value;
@@ -239,7 +248,7 @@ function MaxAB(boardState, depth, a, b, lastX, lastY){
           }
         }
         boardSubState[x][y] = 1;
-        value = MinAB(boardSubState, depth - 1, a, b, x, y);
+        value = MinAB(boardSubState, depth + 1, a, b, x, y);
         if (value >= b){
           return b;
         }
@@ -253,10 +262,10 @@ function MaxAB(boardState, depth, a, b, lastX, lastY){
 }
 
 function MinAB(boardState, depth, a, b, lastX, lastY){
-  if (depth == 0){
-    if(checkWin(boardState, 1, lastX, lastY)) {
-      return 10;
-    }
+  if(checkWin(boardState, 1, lastX, lastY)) {
+    return 10-depth;
+  }
+  if (depth == 5){
     return 0;
   }
   var value;
@@ -277,7 +286,7 @@ function MinAB(boardState, depth, a, b, lastX, lastY){
           }
         }
         boardSubState[x][y] = -1;
-        value = MaxAB(boardSubState, depth - 1, a, b, x, y);
+        value = MaxAB(boardSubState, depth + 1, a, b, x, y);
         if (value <= a){
           return a;
         }
