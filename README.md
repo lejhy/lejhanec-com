@@ -9,3 +9,6 @@ It was built following a Youtube tutorial with my own bits and pieces added.
 ## [Arcade](http://lejhanec.com/arcade.html)
 A simple pong game with various difficulty levels. AI is made by restricting the movements of a computer to make it possible to beat him. The game speed increases at higher difficulty levels and so does the maximum movement speed of the computer movements.
 It was built following a Udemy tutorial with my own bits and pieces added.
+
+## [Gomoku](http://lejhanec.com/gomoku.html)
+A board game classic with different names in different countries. It is similar to TicTacToe, but to win you need to score 5-in-a-row on a 15x15 board. AI is done using a MiniMax algorithm with Alpha-Beta pruning and some game-specific optimizations. It checks for a winning scenario to evaluate the board, which seems to be the most reliable. As of now it goes 5 moves deep.
