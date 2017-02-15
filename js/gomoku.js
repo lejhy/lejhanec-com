@@ -14,7 +14,7 @@ $(document).ready(function() {
     board[x] = [];
     for(var y=0; y < boardSize; y++){
       $("#board .status").after('<div class="square" data-x = "' + x + '" data-y = "' + y + '" onclick="makeMove(this)"></div>')
-      board[x][y] = 0;
+      board[x][y] = 2;
     }
   }
 });
@@ -22,7 +22,7 @@ $(document).ready(function() {
 function reset(){
   for(var x=0; x < boardSize; x++){
     for(var y=0; y < boardSize; y++){
-      board[x][y] = 0;
+      board[x][y] = 2;
       $("#board").find("[data-x='"+ x + "']").filter("[data-y='" + y + "']").html("");
     }
   }
@@ -35,8 +35,9 @@ function makeMove(square){
   if (!gameOver){
     var x = $(square).data("x");
     var y = $(square).data("y");
-    if (board[x][y] == 0){
+    if (board[x][y] == 0 || board[x][y] == 2){
       board[x][y] = humanValue;
+      enableSquares(board, x, y);
       moves++;
       globalLastX = x;
       globalLastY = y;
@@ -50,6 +51,37 @@ function makeMove(square){
       } else {
         computerMove();
       }
+    }
+  }
+}
+
+function enableSquares(boardState, x, y){
+  if(x+1 < boardSize){
+    if (y+1 < boardSize && boardState[x+1][y+1] == 2){
+      boardState[x+1][y+1] = 0;
+    }
+    if (boardState[x+1][y] == 2){
+      boardState[x+1][y] = 0;
+    }
+    if (y-1 >= 0 && boardState[x+1][y-1] == 2){
+      boardState[x+1][y-1] = 0;
+    }
+  }
+  if (y+1 < boardSize && boardState[x][y+1] == 2){
+    boardState[x][y+1] = 0;
+  }
+  if (boardState[x][y-1] == 2){
+    boardState[x][y-1] = 0;
+  }
+  if(x-1 >= 0){
+    if (y+1 < boardSize && boardState[x-1][y+1] == 2){
+      boardState[x-1][y+1] = 0;
+    }
+    if (boardState[x-1][y] == 2){
+      boardState[x-1][y] = 0;
+    }
+    if (y-1 >= 0 && boardState[x-1][y-1] == 2){
+      boardState[x-1][y-1] = 0;
     }
   }
 }
@@ -200,6 +232,7 @@ function MiniMaxAB (boardState, depth, playerValue, lastX, lastY){
             }
           }
           boardSubState[x][y] = 1;
+          enableSquares(boardSubState, x, y);
           value = MinAB(boardSubState, depth + 1, a, b, x, y);
           if (value >= b){
             indexX = x;
@@ -216,6 +249,7 @@ function MiniMaxAB (boardState, depth, playerValue, lastX, lastY){
     }
   }
   boardState[indexX][indexY] = computerValue;
+  enableSquares(boardState, indexX, indexY);
   moves++;
   globalLastX = indexX;
   globalLastY = indexY;
@@ -248,6 +282,7 @@ function MaxAB(boardState, depth, a, b, lastX, lastY){
           }
         }
         boardSubState[x][y] = 1;
+        enableSquares(boardSubState, x, y);
         value = MinAB(boardSubState, depth + 1, a, b, x, y);
         if (value >= b){
           return b;
@@ -286,6 +321,7 @@ function MinAB(boardState, depth, a, b, lastX, lastY){
           }
         }
         boardSubState[x][y] = -1;
+        enableSquares(boardSubState, x, y);
         value = MaxAB(boardSubState, depth + 1, a, b, x, y);
         if (value <= a){
           return a;
