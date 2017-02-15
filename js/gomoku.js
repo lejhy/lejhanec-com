@@ -17,6 +17,7 @@ $(document).ready(function() {
       board[x][y] = 2;
     }
   }
+  board[boardSize/2][boardSize/2] = 0;
 });
 
 function reset(){
@@ -26,6 +27,7 @@ function reset(){
       $("#board").find("[data-x='"+ x + "']").filter("[data-y='" + y + "']").html("");
     }
   }
+  board[boardSize/2][boardSize/2] = 0;
   moves = 0;
   gameOver = false;
   $(".status").text("");
