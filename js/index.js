@@ -1,39 +1,34 @@
-var gallery = [];
+var slides = [];
+var thumbnails = [];
 var jsImgFolder = "../img/";
 var indexImgFolder = "img/";
+var jsThumbnailFolder = "../img/thumbnails/"
+var indexThumbnailFolder = "img/thumbnails/"
 var curPosition = 0;
 
 $(document).ready(function() {
   $.ajax({
-    url: jsImgFolder,
+    url: jsThumbnailFolder,
     success: function(data){
       $(data).find("a").attr("href", function (i, val) {
         if (val.match(/\.(jpe?g|png)$/)) {
-          gallery.push(val);
+          thumbnails.push(val);
         }
       });
     },
     complete: function(){
       var i = 0;
-      var imgPerPage = 12;
-      var pages = Math.ceil(gallery.length/imgPerPage);
+      var thumbnailsPerPage = 12;
+      var pages = Math.ceil(thumbnails.length/thumbnailsPerPage);
       $("#Gallery .page-container").width(100*pages + "%");
-      for (picture of gallery) {
-        if(i%imgPerPage == 0){
+      for (thumbnail of thumbnails) {
+        if(i%thumbnailsPerPage == 0){
           $("#Gallery .page-container").append("<div class='page' style='width : " + 100/pages + "%'><div class='container-fluid'></div></div>");
         }
         if(i%4 == 0){
           $("#Gallery .page:last .container-fluid").append("<div class='row'> </div>");
         }
-        $("#Gallery .page:last .row:last").append('<div class="col-sm-6 col-md-3 col-md-3"><div class="hovereffect"><img src="' + jsImgFolder + picture + '" class="img-responsive img-thumbnail" style="width:100%" alt="Image"><div class="overlay"><h2>' + picture + '</h2><p><a href="javascript:void(0)" onclick="viewImage(\'' + picture + '\')">View</a></p><p><a href="' + indexImgFolder + picture + '" download>Download</a></p></div></div>');
-
-        if(i === 0){
-          $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + i + '" class="active"></li>');
-          $(".carousel-inner").append('<div class="item active"><img src="' + indexImgFolder + picture + '" alt="Image"></div>');
-        } else {
-          $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + i + '"></li>');
-          $(".carousel-inner").append('<div class="item"><img src="' + indexImgFolder + picture + '" alt="Image"></div>');
-        }
+        $("#Gallery .page:last .row:last").append('<div class="col-sm-6 col-md-3 col-md-3"><div class="hovereffect"><img src="' + jsThumbnailFolder + thumbnail + '" class="img-responsive img-thumbnail" style="width:100%" alt="Image"><div class="overlay"><h2>' + thumbnail + '</h2><p><a href="javascript:void(0)" onclick="viewImage(\'' + thumbnail + '\')">View</a></p><p><a href="' + indexImgFolder + thumbnail + '" download>Download</a></p></div></div>');
         i++;
       }
       $("#Gallery .next").on('click', function(event) {
@@ -52,6 +47,30 @@ $(document).ready(function() {
           curPosition = nextPosition;
         }
       });
+    }
+  });
+
+  $.ajax({
+    url: jsImgFolder,
+    success: function(data){
+      $(data).find("a").attr("href", function (i, val) {
+        if (val.match(/\.(jpe?g|png)$/)) {
+          slides.push(val);
+        }
+      });
+    },
+    complete: function(){
+      var i = 0;
+      for (slide of slides){
+        if(i === 0){
+          $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + i + '" class="active"></li>');
+          $(".carousel-inner").append('<div class="item active"><img src="' + indexImgFolder + slide + '" alt="Image"></div>');
+        } else {
+          $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + i + '"></li>');
+          $(".carousel-inner").append('<div class="item"><img src="' + indexImgFolder + slide + '" alt="Image"></div>');
+        }
+        i++;
+      }
     }
   });
 });
