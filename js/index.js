@@ -5,6 +5,7 @@ var indexImgFolder = "img/";
 var jsThumbnailFolder = "../img/thumbnails/"
 var indexThumbnailFolder = "img/thumbnails/"
 var curPosition = 0;
+var imageIndex = 0;
 
 $(document).ready(function() {
   $.ajax({
@@ -60,21 +61,22 @@ $(document).ready(function() {
       });
     },
     complete: function(){
-      var i = 0;
-      for (slide of slides){
-        if(i === 0){
-          $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + i + '" class="active"></li>');
-          $(".carousel-inner").append('<div class="item active"><img src="' + indexImgFolder + slide + '" alt="Image"></div>');
-        } else {
-          $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + i + '"></li>');
-          $(".carousel-inner").append('<div class="item"><img src="' + indexImgFolder + slide + '" alt="Image"></div>');
-        }
-        i++;
-      }
+      $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + imageIndex + '" class="active"></li>');
+      $(".carousel-inner").append('<div class="item active"><img src="' + indexImgFolder + slides[imageIndex] + '" alt="Image"></div>');
+      imageIndex++;
+      $(".carousel-inner img:last").load(loadNextImage());
     }
   });
 });
 
+function loadNextImage(){
+  if (imageIndex < slides.length) {
+    $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + imageIndex + '"></li>');
+    $(".carousel-inner").append('<div class="item"><img src="' + indexImgFolder + slides[imageIndex] + '" alt="Image"></div>');
+    imageIndex++;
+    $(".carousel-inner img:last").load(loadNextImage());
+  }
+}
 
 function viewImage(image){
   $("#viewImage .modal-title").html(image);
