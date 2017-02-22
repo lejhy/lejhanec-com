@@ -64,7 +64,7 @@ $(document).ready(function() {
       $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + imageIndex + '" class="active"></li>');
       $(".carousel-inner").append('<div class="item active"><img src="' + indexImgFolder + slides[imageIndex] + '" alt="Image"></div>');
       imageIndex++;
-      $(".carousel-inner img:last").load(loadNextImage());
+      $(".carousel-inner img:last").on('load', (event) => {loadNextImage()});
     }
   });
 });
@@ -74,7 +74,7 @@ function loadNextImage(){
     $(".carousel-indicators").append('<li data-target="#MainPresentation" data-slide-to="' + imageIndex + '"></li>');
     $(".carousel-inner").append('<div class="item"><img src="' + indexImgFolder + slides[imageIndex] + '" alt="Image"></div>');
     imageIndex++;
-    $(".carousel-inner img:last").load(loadNextImage());
+    $(".carousel-inner img:last").on('load', (event) => {loadNextImage()});
   }
 }
 
