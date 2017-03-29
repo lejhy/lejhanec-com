@@ -12,18 +12,18 @@ A simple pong game with various difficulty levels. AI is made by restricting the
 
 It was built following a Udemy tutorial with my own bits and pieces added.
 
-![Arcade] (Arcade.png)
+![Arcade](Arcade.png)
 
 ## [TicTacToe](http://lejhanec.com/TicTacToe.html)
 A simple tic tac toe game with a computer AI. It's using the MiniMAx AI model to predict the best possible move. You can start the game, or tell the computer to start, but either way you can't win. :smile: 
 
 It was built following a Youtube tutorial with my own bits and pieces added.
 
-![TicTacToe] (TicTacToe.gif)
+![TicTacToe](TicTacToe.gif)
 
 ## [Gomoku](http://lejhanec.com/gomoku.html)
 A board game classic with different names in different countries. It is similar to TicTacToe, but to win you need to score 5-in-a-row on a 15x15 board. AI is done using a MiniMax algorithm with Alpha-Beta pruning and some game-specific optimizations. It checks for a winning scenario to evaluate the board, which seems to be the most reliable. 
 
 As of now it searches 5 moves deep.
 
-![Gomoku] (Gomoku.gif)
+![Gomoku](Gomoku.gif)
